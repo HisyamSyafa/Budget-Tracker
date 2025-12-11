@@ -17,6 +17,7 @@ namespace BudgetTracker.Repositories
 		User GetUserByUsername(string username);
 		// Update GetTransactions to filter by userId
 		List<Transaction> GetTransactions(int userId);
+		List<MonthlyStat> GetMonthlyStats(int userId);
 	}
 
 	public class BudgetRepository: IBudgetRepository
@@ -42,6 +43,26 @@ namespace BudgetTracker.Repositories
 				var allTransactions = connection.Query<Transaction>(query, new { UserId = userId });
 
 				return allTransactions.ToList();
+			}
+		}
+
+		public List<MonthlyStat> GetMonthlyStats(int userId)
+		{
+			using (IDbConnection connection = new MySqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+			{
+				// Assuming Date is stored as 'yyyy-MM-dd' string or similar. 
+				// aggregating by the first 7 chars (yyyy-MM).
+				var query = @"
+                    SELECT 
+                        SUBSTRING(`Date`, 1, 7) AS MonthStr, 
+                        SUM(CASE WHEN TransactionType = 1 THEN Amount ELSE 0 END) AS TotalIncome,
+                        SUM(CASE WHEN TransactionType = 0 THEN Amount ELSE 0 END) AS TotalExpense
+                    FROM Transactions 
+                    WHERE UserId = @UserId
+                    GROUP BY SUBSTRING(`Date`, 1, 7)
+                    ORDER BY MonthStr DESC";
+
+				return connection.Query<MonthlyStat>(query, new { UserId = userId }).ToList();
 			}
 		}
 

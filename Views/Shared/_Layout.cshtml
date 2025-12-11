@@ -21,6 +21,7 @@
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         @if (User.Identity.IsAuthenticated)
                         {
+                        <li class="nav-item">
                             <a class="nav-link text-dark @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Home" && ViewContext.RouteData.Values["Action"]?.ToString() == "Index" ? "active" : "")" asp-controller="Home" asp-action="Index">All Transactions</a>
                         </li>
                         <li class="nav-item">
