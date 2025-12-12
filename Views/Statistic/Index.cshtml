@@ -9,49 +9,67 @@
         <h1>Monthly Statistics</h1>
     </div>
 
-    <div class="card shadow-sm">
-        <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-hover mb-0">
-                    <thead class="bg-light">
-                        <tr>
-                            <th class="py-3 ps-4">Month</th>
-                            <th class="py-3 text-success">Total Income</th>
-                            <th class="py-3 text-danger">Total Expense</th>
-                            <th class="py-3 text-primary">Net Balance</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (Model != null && Model.Any())
-                        {
-                            foreach (var item in Model)
-                            {
-                                var netBalance = item.TotalIncome - item.TotalExpense;
-                                <tr>
-                                    <td class="ps-4 fw-bold">@item.MonthYear</td>
-                                    <td class="text-success">
-                                        💰 $@item.TotalIncome.ToString("N2")
-                                    </td>
-                                    <td class="text-danger">
-                                        💸 $@item.TotalExpense.ToString("N2")
-                                    </td>
-                                    <td class="fw-bold @(netBalance >= 0 ? "text-primary" : "text-danger")">
-                                        $@netBalance.ToString("N2")
-                                    </td>
-                                </tr>
-                            }
-                        }
-                        else
-                        {
-                            <tr>
-                                <td colspan="4" class="text-center py-4 text-muted">
-                                    No transaction data available.
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
+    <div class="d-flex justify-content-between align-items-center mb-4 glass p-3 rounded-3 shadow-sm">
+        <h4 class="mb-0 fw-bold text-primary">Monthly Statistics</h4>
+        <div class="text-secondary small">
+            Overview of your financial performance
         </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th class="ps-4">Month</th>
+                    <th class="text-success">Total Income</th>
+                    <th class="text-danger">Total Expense</th>
+                    <th class="text-primary">Net Balance</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var item in Model)
+                    {
+                        var netBalance = item.TotalIncome - item.TotalExpense;
+                        <tr>
+                            <td class="ps-4">
+                                <span class="fw-bold text-dark fs-5">@item.MonthYear</span>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <span class="badge badge-custom badge-income me-2">Income</span>
+                                    <span class="fw-bold text-income">+$@item.TotalIncome.ToString("N2")</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <span class="badge badge-custom badge-expense me-2">Expense</span>
+                                    <span class="fw-bold text-expense">-$@item.TotalExpense.ToString("N2")</span>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="fw-bold fs-5 @(netBalance >= 0 ? "text-primary" : "text-danger")">
+                                    $@netBalance.ToString("N2")
+                                </span>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="4" class="text-center py-5 text-muted glass rounded-3">
+                            <div class="d-flex flex-column align-items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-inbox mb-3 opacity-50" viewBox="0 0 16 16">
+                                  <path d="M4.98 4a.5.5 0 0 0-.39.188L1.54 8H6a.5.5 0 0 1 .5.5 1.5 1.5 0 1 0 3 0A.5.5 0 0 1 10 8h4.46l-3.05-3.812A.5.5 0 0 0 11.02 4H4.98zm-1.17-.437A1.5 1.5 0 0 1 4.98 3h6.04a1.5 1.5 0 0 1 1.17.563l3.7 4.625a.5.5 0 0 1 .106.374l-.39 3.124A1.5 1.5 0 0 1 14.117 15H1.883a1.5 1.5 0 0 1-1.489-1.314l-.39-3.124a.5.5 0 0 1 .106-.374l3.7-4.625zM9 12a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                                </svg>
+                                <span>No available data yet. Start tracking your budget!</span>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
 </div>
